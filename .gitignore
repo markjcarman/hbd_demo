@@ -1,0 +1,6 @@
+*/llama-cpp-python
+*/pymupdf.pdf
+.idea/
+
+/node_modules
+__pycache__

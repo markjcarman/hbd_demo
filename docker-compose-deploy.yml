@@ -1,0 +1,104 @@
+version: '3.1'
+volumes:
+    elasticsearch-data:
+        driver: local
+services:
+    elasticsearch:
+        image: elasticsearch:7.9.2
+        container_name: elasticsearch_clinical
+        volumes:
+            - elasticsearch-data:/usr/share/elasticsearch/data
+        ports:
+            - "9202:9200"
+        environment:
+            - discovery.type=single-node
+
+        deploy:
+            resources:
+                limits:
+                    memory: 5G
+        restart: always
+        healthcheck:
+            test:
+                [
+                    "CMD-SHELL",
+                    "curl --silent --fail localhost:9200/_cluster/health || exit 1"
+                ]
+            interval: 30s
+            timeout: 30s
+            retries: 3
+    patient-search:
+        build:
+            context: ./patient-search-python-server/
+            dockerfile: Dockerfile
+        image: hbd-demo-patient-search:latest
+        container_name: hbd-demo-patient-search
+        volumes:
+            - ./patient-search-python-server/:/workspace/
+            - ./backend/data/checkpoints/:/models/
+        environment:
+            - PYTHONUNBUFFERED=1
+        ports:
+            - 51125:5003
+        extra_hosts:
+            - "host.docker.internal:host-gateway"
+        restart: always
+        depends_on:
+            elasticsearch:
+                condition: service_healthy
+    llamacpp:
+        container_name: llama-server
+        image: 2603931630/llama-cpp-python
+        # build:
+        #     context: ./llama-server/
+        #     dockerfile: Dockerfile-Deploy
+        ports:
+            - 51124:8000
+        command: sh -c "python -m llama_cpp.server --model /models/llama-2-7b-chat.ggmlv3.q4_K_S.bin --n_ctx 4000"
+        environment:
+            - HOST=0.0.0.0
+        restart: always
+        # deploy:
+        #     resources:
+        #         reservations:
+        #             devices:
+        #                 - driver: nvidia
+        #                   device_ids: ['0']
+        #                   capabilities: [gpu]
+    frontend:
+        image: 2603931630/hbd-demo-frontend
+        # build:
+        #     context: ./frontend/
+        #     dockerfile: Dockerfile-Deploy
+        volumes:
+            - ./axios.js:/usr/src/app/src/boot/axios.js
+            # - ./frontend/src/pages/IndexPage.vue:/usr/src/app/src/pages/IndexPage.vue
+            # npm install
+        container_name: hbd-demo-frontend
+        ports:
+            - 51118:51118
+        restart: always
+        command: sh -c "quasar dev"
+    backend:
+        # build:
+        #     context: ./backend/
+        #     dockerfile: Dockerfile-Deploy
+        image: 2603931630/hbd-demo-backend
+        container_name: hbd-demo-backend
+        # volumes:
+        # - ./backend/:/workspace/
+        environment:
+            - PYTHONUNBUFFERED=1
+        ports:
+            - 51119:5003
+        extra_hosts:
+            - "host.docker.internal:host-gateway"
+        restart: always
+        # deploy:
+        #     resources:
+        #         reservations:
+        #             devices:
+        #                 - driver: nvidia
+        #                   device_ids: ['0']
+        #                   capabilities: [gpu]
+
