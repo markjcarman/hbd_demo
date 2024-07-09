@@ -1,8 +1,6 @@
 version: '3.1'
 
-networks:
-  hbd-demo-network:
-    external: false
+
 volumes:
   elasticsearch-data:
     driver: local
@@ -115,3 +113,6 @@ services:
       - hbd-demo-network
 
 
+networks:
+  hbd-demo-network:
+    external: true
