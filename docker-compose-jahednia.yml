@@ -8,6 +8,7 @@ volumes:
 services:
     nginx:
         image: nginx
+        container_name: nginx_jahednia
         volumes:
             - ./nginx_jahednia.conf:/etc/nginx/nginx.conf
         ports:
@@ -26,7 +27,7 @@ services:
 
     elasticsearch:
         image: elasticsearch:7.9.2
-        container_name: hbd-demo-elasticsearch_clinical
+        container_name: hbd-demo-elasticsearch_clinical_jahednia
         volumes:
             - elasticsearch-data:/usr/share/elasticsearch/data,
         environment:
@@ -57,7 +58,7 @@ services:
         volumes:
             - ./frontend/:/usr/src/app/
         # npm install
-        container_name: hbd-demo-frontend
+        container_name: hbd-demo-frontend_jahednia
         restart: always
         command: sh -c "npm install && npm audit fix --force && quasar dev"
         networks:
@@ -69,7 +70,7 @@ services:
             context: ./backend/
             dockerfile: Dockerfile
         image: hbd-demo-backend:latest
-        container_name: hbd-demo-backend
+        container_name: hbd-demo-backend_jahednia
         volumes:
             - ./backend/:/workspace/
             - ~/models/:/models/
