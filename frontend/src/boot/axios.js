@@ -3,7 +3,7 @@ import axios from "axios";
 
 const patientSearch = './patient-search-api'
 const patientSearchApi = axios.create({
-  baseUrl: patientSearch
+  baseURL: patientSearch
 })
 const llamaServer = "./llama-server";
 const baseApi = axios.create()
