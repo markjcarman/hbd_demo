@@ -6,11 +6,9 @@ doc_dir = '../data/Asclepius-Synthetic/'
 
 # Get the host where Elasticsearch is running, default to localhost
 host = os.environ.get("ELASTICSEARCH_HOST", "localhost")
-port = os.environ.get("ELASTICSEARCH_HOST_PORT", "9200")
 
 document_store = ElasticsearchDocumentStore(
     host=host,
-    port=port,
     username="",
     password="",
     #recreate_index=True
