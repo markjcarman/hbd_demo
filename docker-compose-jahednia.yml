@@ -37,6 +37,8 @@ services:
                 limits:
                     memory: 5G
         restart: always
+        ports:
+            - "9202:9200"
         healthcheck:
             test:
               [
