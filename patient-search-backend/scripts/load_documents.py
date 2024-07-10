@@ -5,10 +5,10 @@ from haystack.document_stores import ElasticsearchDocumentStore
 doc_dir = '../data/Asclepius-Synthetic/'  
 
 # Get the host where Elasticsearch is running, default to localhost
-host = os.environ.get("ELASTICSEARCH_HOST", "localhost")
 
 document_store = ElasticsearchDocumentStore(
-    host=host,
+    host='localhost',
+    port='9202',
     username="",
     password="",
     #recreate_index=True
