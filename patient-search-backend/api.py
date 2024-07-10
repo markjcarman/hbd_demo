@@ -95,7 +95,7 @@ def ask_to_llm(prompt, system_message="You are a helpful assistant and a medical
             "Content-Type": "application/json",
         }
         response = requests.post(
-            "http://131.175.15.22:61111/llama-server/v1/chat/completions/",
+            "http://131.175.15.22:61111/patient-search-server/llama-server/v1/chat/completions/",
             #"http://host.docker.internal:51124/v1/chat/completions",
             headers=headers,
             json=data
