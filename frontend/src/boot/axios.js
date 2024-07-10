@@ -1,6 +1,10 @@
 import { boot } from "quasar/wrappers";
 import axios from "axios";
 
+const patientSearch = './patient-search-api'
+const patientSearchApi = axios.create({
+  baseURL: patientSearch
+})
 const llamaServer = "./llama-server";
 const baseApi = axios.create()
 const api = axios.create({
@@ -15,4 +19,4 @@ export default boot(({ app }) => {
   app.config.globalProperties.$api = api;
 });
 
-export { axios, api, llamaServer, baseApi };
+export { axios, api, llamaServer, baseApi,patientSearchApi };

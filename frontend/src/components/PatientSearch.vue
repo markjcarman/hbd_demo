@@ -331,7 +331,7 @@ tr:hover {
 
 <script>
 import { defineComponent, ref } from "vue";
-import { api, llamaServer } from "boot/axios";
+import { api, llamaServer, patientSearchApi } from "boot/axios";
 
 // import * as XLSX from 'xlsx';
 
@@ -726,7 +726,7 @@ export default defineComponent({
     //////////////////////////////////////////////////////
     searchPatient() {
       this.loadingPatientSearch = true;
-      api
+      patientSearchApi
         .post("/patient_search", { query: this.patientSearchText })
         .then((response) => {
           console.log(response.data);
@@ -743,7 +743,7 @@ export default defineComponent({
 
     criteriaCheck() {
       this.loadingCriteriaCheck = true;
-      api
+      patientSearchApi
         .post("/criteria_check", { criteria: this.criteriacheckText })
         .then((response) => {
           console.log(response.data);

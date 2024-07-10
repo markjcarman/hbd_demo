@@ -1,0 +1,92 @@
+version: '3.1'
+
+
+volumes:
+    elasticsearch-data:
+        driver: local
+
+services:
+    nginx:
+        image: nginx
+        container_name: nginx_jahednia
+        volumes:
+            - ./nginx_jahednia.conf:/etc/nginx/nginx.conf
+        ports:
+            - "51125:8080"
+        networks:
+            hbd-demo-network:
+                aliases:
+                      - jahednia_stack_nginx
+        depends_on:
+            elasticsearch:
+                condition: service_started
+            frontend:
+                condition: service_started
+            patient-search-backend:
+                condition: service_started
+
+    elasticsearch:
+        image: elasticsearch:7.9.2
+        container_name: hbd-demo-elasticsearch_clinical_jahednia
+        volumes:
+            - elasticsearch-data:/usr/share/elasticsearch/data,
+        environment:
+            - discovery.type=single-node
+        deploy:
+            resources:
+                limits:
+                    memory: 5G
+        restart: always
+        ports:
+            - "9202:9200"
+        healthcheck:
+            test:
+              [
+                  "CMD-SHELL",
+                  "curl --silent --fail localhost:9200/_cluster/health || exit 1"
+              ]
+            interval: 30s
+            timeout: 30s
+            retries: 3
+        networks:
+            hbd-demo-network:
+                aliases:
+                      - jahednia_stack_elasticsearch
+    frontend:
+        image: hbd-demo-frontend:latest
+        build:
+            context: ./frontend/
+            dockerfile: Dockerfile
+        volumes:
+            - ./frontend/:/usr/src/app/
+        # npm install
+        container_name: hbd-demo-frontend_jahednia
+        restart: always
+        command: sh -c "npm install && npm audit fix --force && quasar dev"
+        networks:
+            hbd-demo-network:
+                aliases:
+                    - jahednia_stack_frontend
+    patient-search-backend:
+        build:
+            context: ./patient-search-backend/
+            dockerfile: Dockerfile
+        image: patient-search-backend:latest
+        container_name: patient-search-backend
+        volumes:
+            - ./patient-search-backend/:/workspace/
+        environment:
+            - PYTHONUNBUFFERED=1
+        ports:
+            - 51141:5003
+        restart: always
+
+        networks:
+            hbd-demo-network:
+                aliases:
+                    - jahednia_stack_backend
+
+
+networks:
+    hbd-demo-network:
+        external: true

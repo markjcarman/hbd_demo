@@ -1,0 +1,7 @@
+# Folders
+.vscode
+__pycache__/
+venv/
+data/
+*.ckpt
+checkpoints/
