@@ -9,7 +9,7 @@ host = os.environ.get("ELASTICSEARCH_HOST", "localhost")
 port = os.environ.get("ELASTICSEARCH_HOST_PORT", "9200")
 
 document_store = ElasticsearchDocumentStore(
-    host='localhost/',
+    host=host,
     port=port,
     username="",
     password="",
