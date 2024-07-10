@@ -69,12 +69,12 @@ services:
                     - jahednia_stack_frontend
     patient-search-backend:
         build:
-            context: ./backend/
+            context: ./patient-search-backend/
             dockerfile: Dockerfile
         image: patient-search-backend:latest
         container_name: patient-search-backend
         volumes:
-            - ./backend/:/workspace/
+            - ./patient-search-backend/:/workspace/
         environment:
             - PYTHONUNBUFFERED=1
         ports:
