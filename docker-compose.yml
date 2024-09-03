@@ -37,7 +37,7 @@ services:
       resources:
         limits:
           memory: 5G
-    restart: always
+    restart: "no"
     healthcheck:
       test:
         [
@@ -47,6 +47,8 @@ services:
       interval: 30s
       timeout: 30s
       retries: 3
+    ports:
+      - "51150:8000"
     networks:
       - hbd-demo-network
 
@@ -84,7 +86,7 @@ services:
       - ./frontend/:/usr/src/app/
     # npm install
     container_name: hbd-demo-frontend
-    restart: always
+    restart: "no"
     command: sh -c "npm install && npm audit fix --force && quasar dev"
     networks:
       - hbd-demo-network
@@ -111,6 +113,20 @@ services:
             - driver: nvidia
               device_ids: ["0"]
               capabilities: [ gpu ]
+    networks:
+      - hbd-demo-network
+  patient-search-backend:
+    build:
+      context: ./patient-search-backend/
+      dockerfile: Dockerfile
+    image: patient-search-backend:latest
+    container_name: patient-search-backend
+    volumes:
+      - ./patient-search-backend/:/workspace/
+    environment:
+      - PYTHONUNBUFFERED=1
+    restart: always
+
     networks:
       - hbd-demo-network
 

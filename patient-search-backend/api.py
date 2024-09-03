@@ -12,7 +12,7 @@ reader = FARMReader(model_name_or_path="IVN-RIN/medBIT-r3-plus", use_gpu=False)
 
 
 document_store = ElasticsearchDocumentStore(
-    host='jahednia_stack_elasticsearch', # 'host.docker.internal',
+    host='elasticsearch', # 'host.docker.internal',
     port=9200,
     username="",
     password=""

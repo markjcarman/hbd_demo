@@ -22,7 +22,7 @@ services:
                 condition: service_started
             frontend:
                 condition: service_started
-            patient-search-backend:
+            jahednia-patient-search-backend:
                 condition: service_started
 
     elasticsearch:
@@ -67,18 +67,16 @@ services:
             hbd-demo-network:
                 aliases:
                     - jahednia_stack_frontend
-    patient-search-backend:
+    jahednia-patient-search-backend:
         build:
             context: ./patient-search-backend/
             dockerfile: Dockerfile
-        image: patient-search-backend:latest
-        container_name: patient-search-backend
+        image: jahednia-patient-search-backend:latest
+        container_name: jahednia-patient-search-backend
         volumes:
             - ./patient-search-backend/:/workspace/
         environment:
             - PYTHONUNBUFFERED=1
-        ports:
-            - 51141:5003
         restart: always
 
         networks:
