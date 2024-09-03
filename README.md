@@ -17,7 +17,7 @@ This demo contains NLP models and system studied by the members of the working g
 - Open terminal
 - Clone the repo using the command ```git clone https://github.com/markjcarman/hbd_demo```
 - Move into the cloned folder using the command ```cd hbd-demo/```
-- Add the required LLM to the "models" directory: ```https://huggingface.co/lmstudio-community/Meta-Llama-3.1-8B-Instruct-GGUF/blob/main/Meta-Llama-3.1-8B-Instruct-Q5_K_M.gguf```
+- Add the required LLM to the "models" directory: ```https://huggingface.co/lmstudio-community/Meta-Llama-3-8B-Instruct-GGUF/blob/main/Meta-Llama-3-8B-Instruct-Q5_K_M.gguf```
 - Run the command ```docker-compose up -d``` to start the demo  (with newer versions of docker the command is `docker compose` instead of `docker-compose`)
 
 [//]: # (#### Load document into patient search engine)
