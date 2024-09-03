@@ -8,6 +8,7 @@ __pycache__
 .venv/
 .env/
 
-# don't add models to the Github repo!
+# don't add models or documents to the Github repo!
 models/*.gguf
+documents/data
 

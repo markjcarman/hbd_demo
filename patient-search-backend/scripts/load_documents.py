@@ -2,7 +2,7 @@ import os
 from haystack.document_stores import ElasticsearchDocumentStore
 
 # Documents must be .txt files
-doc_dir = '../data/Asclepius-Synthetic/'  
+doc_dir = '/documents/data/'  
 
 # Get the host where Elasticsearch is running, default to localhost
 
