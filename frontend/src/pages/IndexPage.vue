@@ -127,8 +127,8 @@
 
           <resizable-drawer
             v-if="
-              taskName === 'Information Extraction' &&
-              setupName === 'Medication & Timeline with LLM'
+              taskName === 'Information Extraction with LLM' &&
+              setupName === 'Medication & Timeline'
             "
           >
             <template v-slot:block1>
@@ -239,11 +239,6 @@ export default defineComponent({
           setupNames: ["Track1 n2c2 Challenge (en)"],
         },
         {
-          label: "Information Extraction",
-          value: "Information Extraction",
-          setupNames: ["Medication & Timeline with LLM"],
-        },
-        {
           label: "Question Answering",
           value: "question answering",
           setupNames: [
@@ -257,6 +252,11 @@ export default defineComponent({
           label: "ChatBot",
           value: "ChatBot",
           setupNames: ["mistral-7b-openorca-q5"],
+        },
+        {
+          label: "Information Extraction with LLM",
+          value: "Information Extraction with LLM",
+          setupNames: ["Medication & Timeline"],
         },
         {
           group: "Search",
