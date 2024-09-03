@@ -17,18 +17,21 @@ services:
     networks:
       - hbd-demo-network
     depends_on:
-      elasticsearch:
+      hbd_elasticsearch:
         condition: service_started
-      frontend:
+      hbd_frontend:
         condition: service_started
-      backend:
+      hbd_backend:
         condition: service_started
-      llamacpp:
+      hbd_llamacpp:
+        condition: service_started
+      hbd_patient_search_backend:
         condition: service_started
 
-  elasticsearch:
+
+  hbd_elasticsearch:
     image: elasticsearch:7.9.2
-    container_name: hbd-demo-elasticsearch_clinical
+    container_name: hbd_elasticsearch
     volumes:
       - elasticsearch-data:/usr/share/elasticsearch/data,
     environment:
@@ -37,7 +40,7 @@ services:
       resources:
         limits:
           memory: 5G
-    restart: "no"
+    restart: "always"
     healthcheck:
       test:
         [
@@ -52,15 +55,15 @@ services:
     networks:
       - hbd-demo-network
 
-  llamacpp:
-    container_name: llama-server
+  hbd_llamacpp:
+    container_name: hbd_llamacpp
     image: llama-cpp-python:latest
     build:
       context: ./llama-server/
       dockerfile: Dockerfile
     volumes:
-      - ~/models/:/models/
-    command: sh -c "python3 -m llama_cpp.server --model /models/Meta-Llama-3-8B-Instruct.Q5_K_M.gguf --n_ctx 8182 --cache true --chat_format llama-3 --n_gpu_layers -1"
+      - ./models/:/models/
+    command: sh -c "python3 -m llama_cpp.server --model /models/Meta-Llama-3-8B-Instruct-Q5_K_M.gguf --n_ctx 8182 --cache true --chat_format llama-3 --n_gpu_layers -1"
     environment:
       - HOST=0.0.0.0
     ports:
@@ -74,10 +77,11 @@ services:
             - driver: nvidia
               device_ids: ["1"]
               capabilities: [ gpu ]
+    restart: "always"
     networks:
       - hbd-demo-network
 
-  frontend:
+  hbd_frontend:
     image: hbd-demo-frontend:latest
     build:
       context: ./frontend/
@@ -85,17 +89,18 @@ services:
     volumes:
       - ./frontend/:/usr/src/app/
     # npm install
-    container_name: hbd-demo-frontend
-    restart: "no"
+    container_name: hbd_frontend
+    restart: "always"
     command: sh -c "npm install && npm audit fix --force && quasar dev"
     networks:
       - hbd-demo-network
-  backend:
+
+  hbd_backend:
     build:
       context: ./backend/
       dockerfile: Dockerfile
     image: hbd-demo-backend:latest
-    container_name: hbd-demo-backend
+    container_name: hbd_backend
     volumes:
       - ./backend/:/workspace/
       - ~/models/:/models/
@@ -103,7 +108,7 @@ services:
       - PYTHONUNBUFFERED=1
     extra_hosts:
       - "host.docker.internal:host-gateway"
-    restart: always
+    restart: "always"
     deploy:
       resources:
         limits:
@@ -115,18 +120,18 @@ services:
               capabilities: [ gpu ]
     networks:
       - hbd-demo-network
-  patient-search-backend:
+
+  hbd_patient_search_backend:
     build:
       context: ./patient-search-backend/
       dockerfile: Dockerfile
     image: patient-search-backend:latest
-    container_name: patient-search-backend
+    container_name: hbd_patient_search_backend
     volumes:
       - ./patient-search-backend/:/workspace/
     environment:
       - PYTHONUNBUFFERED=1
-    restart: always
-
+    restart: "always"
     networks:
       - hbd-demo-network
 
