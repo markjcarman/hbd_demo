@@ -129,7 +129,7 @@ services:
     container_name: hbd_patient_search_backend
     volumes:
       - ./patient-search-backend/:/workspace/
-      - ./documents/:/documents/data/
+      - ./documents/:/documents/
     environment:
       - PYTHONUNBUFFERED=1
     restart: "always"
