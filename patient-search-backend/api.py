@@ -55,7 +55,7 @@ document_store = ElasticsearchDocumentStore(
 )
 
 # Check whether to index documents
-if document_store.count_documents == 0 and os.path.exists(doc_dir):
+if document_store.count_documents() == 0 and os.path.exists(doc_dir):
     index_documents(document_store)
 
 retriever = BM25Retriever(document_store=document_store)
