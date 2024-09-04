@@ -13,9 +13,11 @@ from haystack.pipelines import ExtractiveQAPipeline
 from haystack.nodes import FARMReader
 
 
+# Documents must be .txt files
+doc_dir = '/documents/data/'
+
+
 def index_documents(doc_store: ElasticsearchDocumentStore):
-    # Documents must be .txt files
-    doc_dir = '/documents/data/'
     # Create pipeline
     indexing_pipeline = Pipeline()
     text_converter = TextConverter()
@@ -53,7 +55,7 @@ document_store = ElasticsearchDocumentStore(
 )
 
 # Check whether to index documents
-if document_store.count_documents == 0:
+if document_store.count_documents == 0 and os.path.exists(doc_dir):
     index_documents(document_store)
 
 retriever = BM25Retriever(document_store=document_store)
