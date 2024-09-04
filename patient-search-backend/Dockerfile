@@ -1,6 +1,7 @@
 FROM python:3.9
 
 RUN mkdir -p /workspace/
+RUN mkdir -p /documents/
 WORKDIR /workspace/
 COPY requirements.txt /workspace/
 RUN apt-get update
