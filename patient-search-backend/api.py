@@ -48,7 +48,7 @@ def index_documents(doc_store: ElasticsearchDocumentStore):
 reader = FARMReader(model_name_or_path="IVN-RIN/medBIT-r3-plus", use_gpu=False)
 
 document_store = ElasticsearchDocumentStore(
-    host='elasticsearch', # 'host.docker.internal',
+    host='hbd_elasticsearch', # 'host.docker.internal',
     port=9200,
     username="",
     password=""
@@ -138,7 +138,7 @@ def ask_to_llm(prompt, system_message="You are a helpful assistant and a medical
             "Content-Type": "application/json",
         }
         response = requests.post(
-            " http://llama-server:8000/v1/chat/completions/",
+            " http://hbd_llamacpp:8000/v1/chat/completions/",
             #"http://host.docker.internal:51124/v1/chat/completions",
             headers=headers,
             json=data
