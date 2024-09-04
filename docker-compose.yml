@@ -36,6 +36,7 @@ services:
       - elasticsearch-data:/usr/share/elasticsearch/data,
     environment:
       - discovery.type=single-node
+      - cluster.routing.allocation.disk.threshold_enabled=false
     deploy:
       resources:
         limits:
