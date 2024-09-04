@@ -1,15 +1,49 @@
-from fastapi import FastAPI, Request, UploadFile, Response
-from fastapi.middleware.cors import CORSMiddleware
-from haystack.document_stores import ElasticsearchDocumentStore
-from haystack.nodes import BM25Retriever
-from haystack.pipelines import ExtractiveQAPipeline
-from haystack.nodes import FARMReader
+import os
 import json
 import requests
 
+from fastapi import FastAPI, Request, UploadFile, Response
+from fastapi.middleware.cors import CORSMiddleware
+
+from haystack.document_stores import ElasticsearchDocumentStore
+from haystack import Pipeline
+from haystack.nodes import TextConverter, PreProcessor
+from haystack.nodes import BM25Retriever
+from haystack.pipelines import ExtractiveQAPipeline
+from haystack.nodes import FARMReader
+
+
+def index_documents(doc_store: ElasticsearchDocumentStore):
+    # Documents must be .txt files
+    doc_dir = '/documents/data/'
+    # Create pipeline
+    indexing_pipeline = Pipeline()
+    text_converter = TextConverter()
+    preprocessor = PreProcessor(
+        clean_whitespace=True,
+        clean_header_footer=True,
+        clean_empty_lines=True,
+        split_by="word",
+        split_length=400,
+        split_overlap=20,
+        split_respect_sentence_boundary=True,
+    )
+    indexing_pipeline.add_node(component=text_converter, name="TextConverter", inputs=["File"])
+    indexing_pipeline.add_node(component=preprocessor, name="PreProcessor", inputs=["TextConverter"])
+    indexing_pipeline.add_node(component=doc_store, name="DocumentStore", inputs=["PreProcessor"])
+    # Gather recursively files to index
+    files_to_index = [
+        os.path.join(dir_path, f)
+        for dir_path, _, filenames in os.walk(doc_dir)
+        for f in filenames
+        if os.path.splitext(f)[1] == '.txt'
+    ]
+    # Run indexing
+    indexing_pipeline.run_batch(file_paths=files_to_index)
+
+
 # reader = FARMReader(model_name_or_path="/models/medBIT-r3-plus_75/", use_gpu=False)
 reader = FARMReader(model_name_or_path="IVN-RIN/medBIT-r3-plus", use_gpu=False)
-
 
 document_store = ElasticsearchDocumentStore(
     host='elasticsearch', # 'host.docker.internal',
@@ -17,6 +51,10 @@ document_store = ElasticsearchDocumentStore(
     username="",
     password=""
 )
+
+# Check whether to index documents
+if document_store.count_documents == 0:
+    index_documents(document_store)
 
 retriever = BM25Retriever(document_store=document_store)
 
