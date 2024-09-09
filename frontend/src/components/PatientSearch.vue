@@ -1,7 +1,6 @@
 <template>
   <div class="row justify-evenly">
-    <div class="row">
-      <q-card class="column no-wrap" style="width: 49%; height: 100vh; margin-right: 5px;">
+      <q-card class="column no-wrap" style="width: 49%; height: 100%; margin-right: 5px;">
         <div class="row">
           <q-card-section style="width: 100%;">
             <q-card-section class="row justify-between" style="height: 5%">
@@ -45,7 +44,7 @@
               class="q-pt-md"
               style="display: flex; justify-content: space-between"
             >
-              <div class="table-container">
+              <div class="table-container" style="width: 100%">
                 <table>
                   <tbody>
                     <tr v-if="combinedResults.length === 0">
@@ -106,9 +105,9 @@
           </q-card-section>
         </div>
       </q-card>
-      <q-card class="column no-wrap" style="width: 50%; height: 100vh">
+      <div class="column no-wrap" style="width: 50%; height: 100%">
         <div class="row" style="height: 100%; width: 100%">
-          <q-card style="width: 100%; height: 35%;">
+          <q-card style="width: 100%; height: 35%; margin-bottom: 5px;">
             <q-card-section class="row justify-between" style="height: 5%">
               <div class="col-2"></div>
               <div class="text-h6 text-primary">
@@ -140,7 +139,6 @@
               </div>
             </q-card-section>
           </q-card>
-          <q-card style="width: 100%; height: 1%;; visibility: hidden;"></q-card>
           <q-card style="width: 100%; height: 64%;">
             <q-card-section class="row justify-between" style="height: 5%">
               <div class="col-2"></div>
@@ -230,8 +228,7 @@
             </q-card-section>
           </q-card>
         </div>
-      </q-card>
-    </div>
+      </div>
   </div>
 </template>
 
