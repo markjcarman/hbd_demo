@@ -1,13 +1,16 @@
 <template>
   <div class="row justify-evenly">
     <div class="row">
-      <q-card class="column no-wrap" style="width: 40%; height: 680px">
+      <q-card class="column no-wrap" style="width: 49%; height: 100vh; margin-right: 5px;">
         <div class="row">
-          <!-- PatientSearch -->
-          <q-card-section class="row">
-            <div class="col-2"></div>
-            <div class="text-h6 text-primary">Patient Search</div>
-            <div class="col-2"></div>
+          <q-card-section style="width: 100%;">
+            <q-card-section class="row justify-between" style="height: 5%">
+              <div class="col-2"></div>
+              <div class="text-h6 text-primary">
+                Patient Search
+              </div>
+              <div class="col-2"></div>
+            </q-card-section>
             <q-card-section class="q-pt-md" style="height: 75px">
               <div style="width: 100%" class="q-pa-sm">
                 <div class="row no-wrap" style="width: 100%">
@@ -31,9 +34,13 @@
                 </div>
               </div>
             </q-card-section>
-            <div class="col-2"></div>
-            <div class="text-h6 text-primary">Search Results:</div>
-            <div class="col-2"></div>
+            <q-card-section class="row justify-between" style="height: 5%">
+              <div class="col-2"></div>
+              <div class="text-h6 text-primary">
+                Search Results
+              </div>
+              <div class="col-2"></div>
+            </q-card-section>
             <div
               class="q-pt-md"
               style="display: flex; justify-content: space-between"
@@ -99,11 +106,9 @@
           </q-card-section>
         </div>
       </q-card>
-      <!-- Middle Card -->
-      <q-card class="column no-wrap" style="width: 60%; height: 680px">
-        <div class="row">
-          <!-- Inclusion/Exclusion Criteria -->
-          <q-card style="width: 100%; height: 250px">
+      <q-card class="column no-wrap" style="width: 50%; height: 100vh">
+        <div class="row" style="height: 100%; width: 100%">
+          <q-card style="width: 100%; height: 35%;">
             <q-card-section class="row justify-between" style="height: 5%">
               <div class="col-2"></div>
               <div class="text-h6 text-primary">
@@ -135,8 +140,8 @@
               </div>
             </q-card-section>
           </q-card>
-          <!-- ChatBot Output -->
-          <q-card style="width: 100%; height: 430px">
+          <q-card style="width: 100%; height: 1%;; visibility: hidden;"></q-card>
+          <q-card style="width: 100%; height: 64%;">
             <q-card-section class="row justify-between" style="height: 5%">
               <div class="col-2"></div>
               <div class="text-h6 text-primary">ChatBot Output</div>
@@ -214,22 +219,6 @@
                   />
                   <div class="q-px-sm"></div>
                   <q-btn
-                    icon="cleaning_services"
-                    @click="loadingChatResponse ? true : resetChatHistory()"
-                    rounded
-                    color="warning"
-                    dense
-                  />
-                  <div class="q-px-sm"></div>
-                  <q-btn
-                    icon="attach_file"
-                    @click="loadingChatResponse ? true : attachDocument()"
-                    rounded
-                    color="secondary"
-                    dense
-                  />
-                  <div class="q-px-sm"></div>
-                  <q-btn
                     :loading="loadingChatResponse"
                     round
                     color="primary"
@@ -249,7 +238,7 @@
 <style>
 .table-container {
   position: relative;
-  max-height: 490px; /* Set the desired height */
+  max-height: 510px; /* Set the desired height */
   overflow-y: auto; /* Enable vertical scrolling */
   border: 1px solid #b9b9b9; /* Border for the table container */
   border-radius: 8px; /* Rounded corners */
