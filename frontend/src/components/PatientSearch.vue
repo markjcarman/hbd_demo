@@ -1,7 +1,7 @@
 <template>
   <div class="row justify-evenly">
       <q-card class="column no-wrap" style="width: 49%; height: 100%; margin-right: 5px;">
-        <div class="row">
+        <div class="row" style="height: 100%;">
           <q-card-section style="width: 100%;">
             <q-card-section class="row justify-between" style="height: 5%">
               <div class="col-2"></div>
@@ -42,9 +42,9 @@
             </q-card-section>
             <div
               class="q-pt-md"
-              style="display: flex; justify-content: space-between"
+              style="display: flex; justify-content: space-between; height: 80%;"
             >
-              <div class="table-container" style="width: 100%">
+              <div class="table-container" style="width: 100%; height: 100%;">
                 <table>
                   <tbody>
                     <tr v-if="combinedResults.length === 0">
@@ -64,7 +64,6 @@
                     </tr>
                     <tr
                       v-if="loadingPatientSearch || loadingCriteriaCheck"
-                      class="loading-container"
                     >
                       <td colspan="1">
                         <q-inner-loading showing color="primary" />
@@ -73,34 +72,6 @@
                   </tbody>
                 </table>
               </div>
-              <!-- <div class="table-container" style="height: 490px; width: 100%;">
-
-                <q-table
-                  class="my-sticky-virtscroll-table"
-                  :rows-per-page-options="[0]"
-                  dense
-                  separator="cell"
-                  :columns="patientColumns"
-                  :rows="combinedResults"
-                  :loading="loadingPatientSearch || loadingCriteriaCheck"
-                  style="width: 100%; height:100%;"
-                >
-                  <template v-slot:loading>
-                    <q-inner-loading showing color="primary" />
-                  </template>
-                  <template v-slot:body="props">
-                    <q-tr :props="props">
-                      <q-td v-for="col in patientColumns" :key="col.name" :props="props">
-                        <pre
-                          style="white-space: nowrap; text-wrap: wrap; overflow: hidden; text-overflow: ellipsis; cursor: pointer;"
-                          v-html="props.row[col.field]"
-                          @click="attachCriteria(props.row)"
-                        ></pre>
-                      </q-td>
-                    </q-tr>
-                  </template>
-                </q-table>
-              </div>  -->
             </div>
           </q-card-section>
         </div>
@@ -117,25 +88,23 @@
             </q-card-section>
             <q-card-section class="" style="height: 80%">
               <div style="width: 100%" class="q-pa-sm">
-                <div class="q-pa-sm" style="width: 100%">
-                  <q-input
-                    style="width: 100%; max-height: 150px"
-                    type="textarea"
-                    outlined
-                    dense
-                    v-model="criteriacheckText"
-                    placeholder="Inclusion-Exclusion Criteria"
-                    @keyup.enter="criteriaCheck"
-                  />
-                  <div class="q-px-sm"></div>
-                  <q-btn
-                    :loading="loadingCriteriaCheck"
-                    round
-                    color="primary"
-                    icon="search"
-                    @click="criteriaCheck"
-                  />
-                </div>
+                <q-input
+                  style="width: 100%; max-height: 150px;"
+                  type="textarea"
+                  outlined
+                  dense
+                  v-model="criteriacheckText"
+                  placeholder="Inclusion-Exclusion Criteria"
+                  @keyup.enter="criteriaCheck"
+                />
+                <div class="q-px-sm"></div>
+                <q-btn
+                  :loading="loadingCriteriaCheck"
+                  round
+                  color="primary"
+                  icon="search"
+                  @click="criteriaCheck"
+                />
               </div>
             </q-card-section>
           </q-card>
@@ -245,6 +214,7 @@
 
 table {
   width: 100%;
+  height: 100%;
   border-collapse: collapse; /* Collapse borders */
   position: relative;
 }
@@ -272,48 +242,13 @@ tr:hover {
   cursor: pointer;
 }
 .empty-row {
-  height: 400px; /* Match the height of the container to ensure the table size is consistent */
+  height: 100%;
   text-align: center; /* Center the text */
   vertical-align: middle; /* Vertically center the text */
   color: #999; /* Lighter color for the empty state text */
 }
 
-.loading-container {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: rgba(
-    255,
-    255,
-    255,
-    0.8
-  ); /* Semi-transparent background to overlay the table */
-  border-radius: 16px; /* Match the rounded corners of the table container */
-}
 </style>
-
-<!-- <style lang="sass">
-.highlighted-row
-  background-color: #f0f0f0 /* Choose your desired highlight color */
-
-.my-sticky-virtscroll-table
-  width: 100%
-  height: 100%
-  .q-table__top,
-  .q-table__bottom,
-  thead tr:first-child th
-    background-color: #fff
-  thead tr th
-    position: sticky
-    z-index: 1
-  thead tr:last-child th
-    top: 48px
-  thead tr:first-child th
-    top: 0
-
-
-</style> -->
 
 <script>
 import { defineComponent, ref } from "vue";
