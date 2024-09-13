@@ -1,263 +1,247 @@
 <template>
   <div class="row justify-evenly">
-      <q-card class="column no-wrap" style="width: 49%; height: 100%; margin-right: 5px;">
-        <div class="row" style="height: 100%;">
-          <q-card-section style="width: 100%;">
-            <q-card-section class="row justify-between" style="height: 5%">
-              <div class="col-2"></div>
-              <div class="text-h6 text-primary">
-                Patient Search
-              </div>
-              <div class="col-2"></div>
-            </q-card-section>
-            <q-card-section class="q-pt-md" style="height: 75px">
-              <div style="width: 100%" class="q-pa-sm">
-                <div class="row no-wrap" style="width: 100%">
-                  <q-input
-                    style="width: 100%"
-                    rounded
-                    outlined
-                    dense
-                    v-model="patientSearchText"
-                    placeholder="Write a condition"
-                    @keyup.enter="searchPatient"
-                  />
-                  <div class="q-px-sm"></div>
-                  <q-btn
-                    :loading="loadingPatientSearch"
-                    round
-                    color="primary"
-                    icon="search"
-                    @click="searchPatient"
-                  />
-                </div>
-              </div>
-            </q-card-section>
-            <q-card-section class="row justify-between" style="height: 5%">
-              <div class="col-2"></div>
-              <div class="text-h6 text-primary">
-                Search Results
-              </div>
-              <div class="col-2"></div>
-            </q-card-section>
-            <div
-              class="q-pt-md"
-              style="display: flex; justify-content: space-between; height: 80%;"
-            >
-              <div class="table-container" style="width: 100%; height: 100%;">
-                <table>
-                  <tbody>
-                    <tr v-if="combinedResults.length === 0">
-                      <td class="empty-row">No results found</td>
-                    </tr>
-                    <tr
-                      v-else
-                      v-for="(row, index) in combinedResults"
-                      :key="index"
-                      :class="{ highlighted: selectedRow === index }"
-                      @click="
-                        selectRow(index);
-                        attachCriteria(row);
-                      "
-                    >
-                      <td v-html="row.context"></td>
-                    </tr>
-                    <tr
-                      v-if="loadingPatientSearch || loadingCriteriaCheck"
-                    >
-                      <td colspan="1">
-                        <q-inner-loading showing color="primary" />
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
+    <q-card class="column no-wrap" style="width: 49%; height: 100%; margin-right: 5px;">
+      <div class="row" style="height: 100%;">
+        <q-card-section style="width: 100%;">
+          <q-card-section class="row justify-between" style="height: 5%">
+            <div class="col-2"></div>
+            <div class="text-h6 text-primary">Patient Search</div>
+            <div class="col-2"></div>
           </q-card-section>
-        </div>
-      </q-card>
-      <div class="column no-wrap" style="width: 50%; height: 100%">
-        <div class="row" style="height: 100%; width: 100%">
-          <q-card style="width: 100%; height: 35%; margin-bottom: 5px;">
-            <q-card-section class="row justify-between" style="height: 5%">
-              <div class="col-2"></div>
-              <div class="text-h6 text-primary">
-                Inclusion/Exclusion Criteria
-              </div>
-              <div class="col-2"></div>
-            </q-card-section>
-            <q-card-section class="" style="height: 80%">
-              <div style="width: 100%" class="q-pa-sm">
+          <q-card-section class="q-pt-md" style="height: 75px">
+            <div style="width: 100%" class="q-pa-sm">
+              <div class="row no-wrap" style="width: 100%">
                 <q-input
-                  style="width: 100%; max-height: 150px;"
-                  type="textarea"
+                  style="width: 100%"
+                  rounded
                   outlined
                   dense
-                  v-model="criteriacheckText"
-                  placeholder="Inclusion-Exclusion Criteria"
-                  @keyup.enter="criteriaCheck"
+                  v-model="patientSearchText"
+                  placeholder="Write a condition"
+                  @keyup.enter="searchPatient"
                 />
                 <div class="q-px-sm"></div>
                 <q-btn
-                  :loading="loadingCriteriaCheck"
+                  :loading="loadingPatientSearch"
                   round
                   color="primary"
                   icon="search"
-                  @click="criteriaCheck"
+                  @click="searchPatient"
                 />
               </div>
-            </q-card-section>
-          </q-card>
-          <q-card style="width: 100%; height: 64%;">
-            <q-card-section class="row justify-between" style="height: 5%">
-              <div class="col-2"></div>
-              <div class="text-h6 text-primary">ChatBot Output</div>
-              <div class="col-2"></div>
-            </q-card-section>
-            <q-card-section class="" style="height: 90%">
+            </div>
+          </q-card-section>
+          <q-card-section class="row justify-between" style="height: 5%">
+            <div class="col-2"></div>
+            <div class="text-h6 text-primary">Search Results</div>
+            <div class="col-2"></div>
+          </q-card-section>
+          <div
+            class="q-pt-md"
+            style="display: flex; justify-content: space-between; height: 80%;"
+          >
+            <div class="table-container" style="width: 100%; height: 100%;">
+              <table>
+                <tbody>
+                  <tr v-if="combinedResults.length == 0">
+                    <td class="empty-row">No results found</td>
+                  </tr>
+                  <tr
+                    v-else
+                    v-for="(row, index) in combinedResults"
+                    :key="index"
+                    :class="{ highlighted: selectedRow == index }"
+                    @click="
+                      selectRow(index);
+                      attachCriteria(row);
+                    "
+                  >
+                    <td v-html="row.context"></td>
+                  </tr>
+                  <tr
+                    v-if="loadingPatientSearch || loadingCriteriaCheck"
+                  >
+                    <td colspan="1">
+                      <q-inner-loading showing color="primary" />
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </q-card-section>
+      </div>
+    </q-card>
+    <div class="column no-wrap" style="width: 50%; height: 100%">
+      <div class="row" style="height: 100%; width: 100%">
+        <q-card style="width: 100%; height: 35%; margin-bottom: 5px;">
+          <q-card-section class="row justify-between" style="height: 5%">
+            <div class="col-2"></div>
+            <div class="text-h6 text-primary">Inclusion/Exclusion Criteria</div>
+            <div class="col-2"></div>
+          </q-card-section>
+          <q-card-section class="" style="height: 80%">
+            <div style="width: 100%" class="q-pa-sm">
+              <q-input
+                style="width: 100%; max-height: 150px;"
+                type="textarea"
+                outlined
+                dense
+                v-model="criteriacheckText"
+                placeholder="Inclusion-Exclusion Criteria"
+                @keyup.enter="criteriaCheck"
+              />
+              <div class="q-px-sm"></div>
+              <q-btn
+                :loading="loadingCriteriaCheck"
+                round
+                color="primary"
+                icon="search"
+                @click="criteriaCheck"
+              />
+            </div>
+          </q-card-section>
+        </q-card>
+        <q-card style="width: 100%; height: 64%;">
+          <q-card-section class="row justify-between" style="height: 5%">
+            <div class="col-2"></div>
+            <div class="text-h6 text-primary">ChatBot Output</div>
+            <div class="col-2"></div>
+          </q-card-section>
+          <q-card-section class="" style="height: 90%">
+            <div
+              v-if="loadingChatBot"
+              class="column justify-center items-center no-wrap col-12"
+              style="height: 100%"
+            >
+              <q-spinner color="primary" size="6em" />
+            </div>
+            <div
+              v-if="!loadingChatBot"
+              class="column justify-center items-center no-wrap col-12"
+              style="height: 100%"
+            >
               <div
-                v-if="loadingChatBot"
-                class="column justify-center items-center no-wrap col-12"
-                style="height: 100%"
-              >
-                <q-spinner color="primary" size="6em" />
-              </div>
+                class="row justify-start items-center"
+                style="width: 100%"
+              ></div>
               <div
-                v-if="!loadingChatBot"
-                class="column justify-center items-center no-wrap col-12"
-                style="height: 100%"
+                style="
+                  height: 100%;
+                  width: 100%;
+                  border-radius: 4px;
+                  border: 1.5px solid #bdc3c7;
+                "
+                class="overflow-auto q-pa-md"
+                ref="chatWindow"
               >
-                <div
-                  class="row justify-start items-center"
-                  style="width: 100%"
-                ></div>
-                <div
-                  style="
-                    height: 100%;
-                    width: 100%;
-                    border-radius: 4px;
-                    border: 1.5px solid #bdc3c7;
-                  "
-                  class="overflow-auto q-pa-md"
-                  ref="chatWindow"
-                >
-                  <div class="q-px-sm row justify-center" style="height: 100%">
-                    <div class="col-12">
+                <div class="q-px-sm row justify-center" style="height: 100%">
+                  <div class="col-12">
+                    <div
+                      v-for="chatLine in chatHistory"
+                      :key="chatLine"
+                      :class="
+                        'row justify-' +
+                        chatConfig['chatLinePosition'][chatLine.role] +
+                        ' q-py-sm'
+                      "
+                    >
                       <div
-                        v-for="chatLine in chatHistory"
-                        :key="chatLine"
                         :class="
-                          'row justify-' +
-                          chatConfig['chatLinePosition'][chatLine.role] +
-                          ' q-py-sm'
+                          'bg-' +
+                          chatConfig['chatLineColor'][chatLine.role] +
+                          ' q-pa-sm'
+                        "
+                        style="
+                          border-radius: 12px;
+                          width: fit-content;
+                          max-width: 60%;
+                          white-space: pre-line;
                         "
                       >
-                        <div
-                          :class="
-                            'bg-' +
-                            chatConfig['chatLineColor'][chatLine.role] +
-                            ' q-pa-sm'
-                          "
-                          style="
-                            border-radius: 12px;
-                            width: fit-content;
-                            max-width: 60%;
-                            white-space: pre-line;
-                          "
-                        >
-                          {{ chatLine.content }}
-                        </div>
+                        {{ chatLine.content }}
                       </div>
                     </div>
                   </div>
                 </div>
-                <div class="q-pa-sm"></div>
-                <div class="row justify-center no-wrap" style="width: 100%">
-                  <q-input
-                    style="width: 100%"
-                    rounded
-                    outlined
-                    dense
-                    v-model="inputText"
-                    placeholder="Write a message"
-                    @keyup.enter="
-                      loadingChatResponse ? true : sendMessage(inputText)
-                    "
-                  />
-                  <div class="q-px-sm"></div>
-                  <q-btn
-                    :loading="loadingChatResponse"
-                    round
-                    color="primary"
-                    icon="send"
-                    @click="sendMessage(inputText)"
-                  />
-                </div>
               </div>
-            </q-card-section>
-          </q-card>
-        </div>
+              <div class="q-pa-sm"></div>
+              <div class="row justify-center no-wrap" style="width: 100%">
+                <q-input
+                  style="width: 100%"
+                  rounded
+                  outlined
+                  dense
+                  v-model="inputText"
+                  placeholder="Write a message"
+                  @keyup.enter="
+                    loadingChatResponse ? true : sendMessage(inputText)
+                  "
+                />
+                <div class="q-px-sm"></div>
+                <q-btn
+                  :loading="loadingChatResponse"
+                  round
+                  color="primary"
+                  icon="send"
+                  @click="sendMessage(inputText)"
+                />
+              </div>
+            </div>
+          </q-card-section>
+        </q-card>
       </div>
+    </div>
   </div>
 </template>
 
 <style>
 .table-container {
   position: relative;
-  max-height: 510px; /* Set the desired height */
-  overflow-y: auto; /* Enable vertical scrolling */
-  border: 1px solid #b9b9b9; /* Border for the table container */
-  border-radius: 8px; /* Rounded corners */
-  padding: 8px; /* Add padding inside the container to separate the border from the table content */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional: add a shadow for better visual appearance */
+  max-height: 510px; 
+  overflow-y: auto; 
+  border: 1px solid #b9b9b9; 
+  border-radius: 8px;
+  padding: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
 }
-
 table {
   width: 100%;
   height: 100%;
-  border-collapse: collapse; /* Collapse borders */
+  border-collapse: collapse; 
   position: relative;
 }
-
 td {
   border-top: 1px solid #ddd;
   border-bottom: 1px solid #ddd;
   padding: 8px;
 }
-
 tr:first-child td {
-  border-top: none; /* Remove top border for the first row */
+  border-top: none; 
 }
-
 tr:last-child td {
-  border-bottom: none; /* Remove bottom border for the last row */
+  border-bottom: none;
 }
-
 tr.highlighted {
-  background-color: #f0f0f0; /* Light blue background for highlighted row */
+  background-color: #f0f0f0;
 }
-
 tr:hover {
   background-color: #f5f5f5;
   cursor: pointer;
 }
 .empty-row {
   height: 100%;
-  text-align: center; /* Center the text */
-  vertical-align: middle; /* Vertically center the text */
-  color: #999; /* Lighter color for the empty state text */
+  text-align: center; 
+  vertical-align: middle; 
+  color: #999;
 }
-
 </style>
 
 <script>
 import { defineComponent, ref } from "vue";
 import { api, llamaServer, patientSearchApi } from "boot/axios";
 
-// import * as XLSX from 'xlsx';
-
 const patientColumns = [
-  // { name: 'document_id', label: 'id', field: 'document_id', required: true, sortable: false, align: 'left'},
   {
     name: "context",
     label: "",
@@ -266,8 +250,6 @@ const patientColumns = [
     sortable: false,
     align: "left",
   },
-  // { name: 'inclusion', label: 'inclusion', field: 'inclusion', required: true, sortable: false, align: 'left'},
-  // { name: 'text', label: 'text', field: 'text', required: false, sortable: false, align: 'left'}
 ];
 
 const patientColumns1 = [
@@ -284,7 +266,6 @@ const patientColumns1 = [
 const visiblePatientColumns = [
   "document_id",
   "context",
-  //   'inclusion'
 ];
 const visiblePatientColumns1 = ["inclusion"];
 const chatConfig = {
@@ -366,7 +347,6 @@ export default defineComponent({
         return text.substring(0, maxLength) + "...";
       }
 
-      // Process patientResults
       this.patientResults.forEach((result, index) => {
         const row = {};
         let idString = `<strong>PatientID</strong>: ${result.document_id}`;
@@ -381,34 +361,11 @@ export default defineComponent({
         }
         combined.push(row);
       });
-
-      // Process criteriaResults
-      // this.criteriaResults.forEach((result, index) => {
-      //   const row = {};
-      //   row.id = 'id';
-      //   row.context = 'context';
-      //   row.inclusion = 'Inclusion'; // Title for inclusion value
-      //   row.idValue = this.patientResults[index].document_id;
-      //   row.contextValue = this.patientResults[index].context;
-      //   row.inclusionValue = result.text;
-      //   combined.push(row);
-      // });
-
       return combined;
     },
   },
   methods: {
     async sendMessage(myText) {
-      // let currentChat = null
-      // if (this.attached){
-      //   currentChat = [
-      //     { content: 'Questo è il testo clinico allegato. TESTO ALLEGATO: ```' + this.attachedDocument + '```' , role: "user" },
-      //     { content: myText, role: "user" }
-      //   ]
-      // } else {
-      //   currentChat = [{ content: myText, role: "user" }]
-      // }
-      // console.log(currentChat)
       let currentChat = [{ content: myText, role: "user" }];
 
       this.loadingChatResponse = true;
@@ -423,7 +380,6 @@ export default defineComponent({
       this.$nextTick(() => {
         this.$refs.chatWindow.scrollTop = this.$refs.chatWindow.scrollHeight;
       });
-      // this.chatHistory.slice(-1)[0]['content'] = ''
       fetch(llamaServer + "/v1/chat/completions", {
         // fetch('http://localhost:51124/v1/chat/completions', {
         method: "POST",
@@ -432,10 +388,6 @@ export default defineComponent({
           stream: true,
           temperature: 0,
           max_tokens: 500,
-          //  top_p: 0,
-          //  top_k: 0,
-          //  mirostat_tau: 3.0,
-          //  repeat_penalty: 1.1
         }),
         headers: {
           "Content-Type": "application/json",
@@ -457,13 +409,11 @@ export default defineComponent({
               return;
             }
             let chunkRaw = new TextDecoder().decode(value);
-            // console.log(chunkRaw)
             const chunkArray = chunkRaw.split("data:").slice(1);
 
             for (let chunk of chunkArray) {
               try {
                 chunk = JSON.parse(chunk.split(": ping -")[0]);
-                // console.log(chunk)
               } catch {
                 console.log("il parsing non è andato a buon fine");
                 console.log(chunk);
@@ -481,7 +431,6 @@ export default defineComponent({
                   ][0]["delta"]["content"]
                     ? chunk["choices"][0]["delta"]["content"]
                     : "";
-                  // Gestisci il chunk di evento ricevuto dallo stream
                   this.$nextTick(() => {
                     this.$refs.chatWindow.scrollTop =
                       this.$refs.chatWindow.scrollHeight;
@@ -504,30 +453,17 @@ export default defineComponent({
           this.loadingChatResponse = false;
         });
     },
+
     loadChatBot() {
       this.resetChatHistory();
-      // this.loadingChatBot = true
-
-      // const modelName = this.modelConfig[this.setupName].modelName
-      // api.get('/get_chatbot_name').then( (response) => {
-      //   if (response.data.model_name !== modelName) {
-      //     api.post('/set_chatbot_model', {model_name: modelName}).then((response)=> {
-      //       this.loadingChatBot = false
-      //     })
-      //   }else{
-      //     this.loadingChatBot = false
-      //   }
-
-      // }).catch( (error) => {
-      //   error.message
-      //   this.loadingChatBot = false
-      // })
     },
+
     resetChatHistory() {
       this.chatHistory = JSON.parse(
         JSON.stringify(this.initChatHistory["default"])
       );
     },
+
     attachDocument() {
       if (this.inputLetter != null && this.inputLetter != "")
         this.attachedDocument = this.inputLetter;
@@ -548,10 +484,6 @@ export default defineComponent({
           stream: true,
           temperature: 0,
           max_tokens: 1,
-          // top_p: 0,
-          // top_k: 0,
-          // mirostat_tau: 0,
-          // repeat_penalty: 1.1
         }),
         headers: {
           "Content-Type": "application/json",
@@ -577,21 +509,25 @@ export default defineComponent({
           reader.read().then(processStream);
         });
     },
-    //////////////////////////////////////////////////////
+
     selectRow(index) {
       this.selectedRow = index; // Set selectedRow to index of clicked row
     },
+
     attachCriteria(row) {
       console.log("attach called with:", row);
       const txt = row.text;
       this.$emit("update:inputLetter", txt);
       this.$emit("update:inputMode", "edit");
       this.dropzoneURL = "";
+      this.resetChatHistory();
       const text = this.criteriacheckText;
       if (text != null && text.trim() !== "") {
         const criteriaText = text.trim();
         const criteriaResult = row.inclusion.trim();
-        const CriteriaMessage = `Given the clinical text and the following eligibility inclusion criteria for a clinical trial:
+        const CriteriaMessage = `Given the clinical text:
+              (${txt})
+              and the following eligibility inclusion criteria for a clinical trial:
               (${criteriaText})
               Determined the patient:
               (${criteriaResult})`;
@@ -615,10 +551,6 @@ export default defineComponent({
           stream: true,
           temperature: 0,
           max_tokens: 1,
-          // top_p: 0,
-          // top_k: 0,
-          // mirostat_tau: 0,
-          // repeat_penalty: 1.1
         }),
         headers: {
           "Content-Type": "application/json",
@@ -644,7 +576,7 @@ export default defineComponent({
           reader.read().then(processStream);
         });
     },
-    //////////////////////////////////////////////////////
+
     searchPatient() {
       this.loadingPatientSearch = true;
       patientSearchApi
@@ -658,7 +590,6 @@ export default defineComponent({
           console.log("error with patient search call:", error.message);
           this.loadingPatientSearch = false;
         });
-      // Clear the criteriaResults array when the patient search is done
       this.criteriaResults = [];
     },
 
@@ -682,6 +613,7 @@ export default defineComponent({
       this.$emit("update:inputMode", "edit");
       this.dropzoneURL = "";
     },
+
     updateTaskName() {
       this.setupName = null;
       this.taskName = this.taskName.value;

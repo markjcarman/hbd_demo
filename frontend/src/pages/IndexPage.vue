@@ -118,7 +118,7 @@
             </template>
             <template v-slot:block2>
               <PatientSearch
-                style="height: 100%"
+                style="height: 100vh"
                 v-model:inputLetter="inputLetter"
                 v-model:inputMode="inputMode"
               />
