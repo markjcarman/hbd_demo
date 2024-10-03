@@ -325,6 +325,8 @@ export default defineComponent({
       visiblePatientColumns1,
       patientColumns,
       patientColumns1,
+      combinedResults: [],
+      originalResults: [],
       loadingPatientSearch: ref(false),
       patientSearchText: ref(""),
       patientResults: ref([]),
@@ -577,35 +579,93 @@ export default defineComponent({
         });
     },
 
-    searchPatient() {
+   // searchPatient() {
+   //   this.loadingPatientSearch = true;
+   //   patientSearchApi
+   //     .post("/patient_search", { query: this.patientSearchText })
+   //     .then((response) => {
+   //       console.log(response.data);
+   //       this.loadingPatientSearch = false;
+   //       this.patientResults = response.data.output;
+   //     })
+   //     .catch((error) => {
+   //       console.log("error with patient search call:", error.message);
+   //       this.loadingPatientSearch = false;
+   //     });
+   //   this.criteriaResults = [];
+   // },
+   searchPatient() {
       this.loadingPatientSearch = true;
-      patientSearchApi
-        .post("/patient_search", { query: this.patientSearchText })
+      patientSearchApi.post("/patient_search", { query: this.patientSearchText })
         .then((response) => {
-          console.log(response.data);
+          this.originalResults = response.data.output;  // Store original search results
+          this.combinedResults = [...this.originalResults];  // Copy them for combined usage
           this.loadingPatientSearch = false;
-          this.patientResults = response.data.output;
         })
         .catch((error) => {
-          console.log("error with patient search call:", error.message);
+          console.error("error with patient search call:", error.message);
           this.loadingPatientSearch = false;
         });
-      this.criteriaResults = [];
     },
 
+    // criteriaCheck() {
+    //  this.loadingCriteriaCheck = true;
+    //  patientSearchApi
+    //    .post("/criteria_check", { criteria: this.criteriacheckText })
+    //    .then((response) => {
+    //      console.log(response.data);
+    //      this.loadingCriteriaCheck = false;
+    //      this.criteriaResults = response.data.criteria;
+    //    })
+    //    .catch((error) => {
+    //      console.log("error with criteria check:", error.message);
+    //      this.loadingCriteriaCheck = false;
+    //    });
+    // },
     criteriaCheck() {
       this.loadingCriteriaCheck = true;
-      patientSearchApi
-        .post("/criteria_check", { criteria: this.criteriacheckText })
+      patientSearchApi.post("/criteria_check", { criteria: this.criteriacheckText })
         .then((response) => {
-          console.log(response.data);
+          // Attach eligibility info to the original search results
+          this.attachEligibilityToResults(response.data.criteria);
+          this.rerankResults();  // Rerank based on eligibility status
           this.loadingCriteriaCheck = false;
-          this.criteriaResults = response.data.criteria;
         })
         .catch((error) => {
-          console.log("error with criteria check:", error.message);
+          console.error("error with criteria check call:", error.message);
           this.loadingCriteriaCheck = false;
         });
+    },
+
+    attachEligibilityToResults(eligibilityResults) {
+      this.combinedResults = this.originalResults.map((result, index) => {
+        return {
+          ...result,
+          eligibility: eligibilityResults[index]?.eligibility || "Unknown eligibility"
+        };
+      });
+    },
+
+    rerankResults() {
+      // Sorting criteria:
+      // "Eligible" results come first, then "Potentially eligible", then "Not eligible"
+      this.combinedResults.sort((a, b) => {
+        const aStatus = this.getEligibilityStatus(a.eligibility);
+        const bStatus = this.getEligibilityStatus(b.eligibility);
+        return aStatus - bStatus;  // Sort based on numeric values of eligibility status
+      });
+    },
+
+    getEligibilityStatus(eligibilityText) {
+      if (eligibilityText.toLowerCase().startsWith("eligible")) {
+        return 0;  // Highest rank (Eligible)
+      } else if (eligibilityText.toLowerCase().startsWith("potentially eligible")) {
+        return 1;  // Middle rank (Potentially eligible)
+      } else if (eligibilityText.toLowerCase().startsWith("not eligible")) {
+        return 2;  // Lowest rank (Not eligible)
+      } else {
+        return 3;  // Unclassified or unknown eligibility
+      }
     },
 
     showRetrievedDocument(text) {

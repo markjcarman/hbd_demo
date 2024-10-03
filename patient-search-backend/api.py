@@ -168,16 +168,26 @@ async def criteria_check(request: Request):
         ```
         {criteria}
         ```
-        Determine whether the patient would be elegible for the clinical trial, responding either "Elegible, because ...", "Potentially elegible, if ..." or "Not elegible, because ..."  
-        Response: 
+        
+        Please carefully evaluate the patient information, paying close attention to any specific inclusion criteria, especially numeric values (e.g., age, weight, lab results, etc.).
+
+        - If the required information is available, use the exact values in your response.
+        - If any single criterion is not met, respond with "Not Eligible because ..." and state the reason.
+        - In any case of unmentioned or unavailable information or values, do not respond with "Eligible because ..." under any circumstances.
+        - If the information is missing, ambiguous, inferred, or unclear in the clinical text, respond with "Insufficient information because ..." and explain that the necessary information is not explicitly stated.
+        - Do not use placeholders like "[REDACTED]" If exact values are not provided in the clinical text, do not make assumptions or inferences.
+        - If a criterion is inferred (e.g., the patient's age is inferred but not explicitly mentioned), respond with "Insufficient information because ..." and explain that the information is not explicitly stated.
+        - If any placeholders like "[REDACTED]" is used in the clinical text instead of the exact numeric values such as age, weight, etc, respond with "Insufficient information because ...".
+        - If any numeric values was not mentioned or mentioned as "[REDACTED]" (e.g., date of birth: [REDACTED]), respond with "Insufficient information because ...".
+
+        Respond only in the following format: 
+        "Eligible because ..." 
+        or 
+        "Not Eligible because ..." 
+        or 
+        "Insufficient information because ...".
+        
         '''
-        # If it contains multiple inclusion criterias, re-write those criterias in the following format:
-        # Criterion 1 - …
-        # Criterion 2 - …
-        # …
-        # Criterion N - …
-        # Then answer with the format like: YES, it is
-        # '''
         answer = ask_to_llm(prompt)
         i_criteria.append(answer)
     # i_criteria = ["yes", "no", "yes"]
