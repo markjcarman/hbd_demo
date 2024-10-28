@@ -289,4 +289,10 @@ async def criteria_check(request: Request):
         comparison_result = ask_to_llm(reformat_prompt)
         comparison_results.append(comparison_result)
 
-    return {'criteria': comparison_results}
+    in_criteria = []
+    for document in comparison_results:
+        output_dict = {}
+        output_dict['text'] = document
+        in_criteria.append(output_dict)
+
+    return {'criteria': in_criteria}
