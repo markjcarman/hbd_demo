@@ -16,10 +16,10 @@ This demo contains NLP models and system studied by the members of the working g
 - Install and Configure the NVIDIA Container Toolkit([How to install](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html))
 - Open terminal
 - Clone the repo using the command ```git clone https://github.com/markjcarman/hbd_demo```
-- Move into the cloned folder using the command ```cd hbd-demo/```
+- Move into the cloned folder using the command ```cd hbd_demo/```
 - Add the required LLM to the "models" directory: ```https://huggingface.co/lmstudio-community/Meta-Llama-3-8B-Instruct-GGUF/blob/main/Meta-Llama-3-8B-Instruct-Q5_K_M.gguf``` (see the `README.txt` in the `models/` directory for further details)
 - Add the documents for patient search to the "documents" directory (see the `README.txt` in the `documents/` directory for further details)
-- Run the command ```docker-compose up -d``` to start the demo  (with newer versions of docker the command is `docker compose` instead of `docker-compose`)
+- Run the command ```docker compose up -d``` to start the demo  (with newer versions of docker the command is `docker compose` instead of `docker-compose`)
 
 [//]: # (#### Load document into patient search engine)
 
