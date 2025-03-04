@@ -325,7 +325,6 @@ export default defineComponent({
       visiblePatientColumns1,
       patientColumns,
       patientColumns1,
-      combinedResults: [],
       originalResults: [],
       loadingPatientSearch: ref(false),
       patientSearchText: ref(""),
